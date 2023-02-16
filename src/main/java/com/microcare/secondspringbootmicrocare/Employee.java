@@ -1,4 +1,4 @@
-package com.microcare.springbootmicrocare.pojo;
+package com.microcare.secondspringbootmicrocare;
 
 import java.time.LocalDate;
 

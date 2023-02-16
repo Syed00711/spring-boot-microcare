@@ -1,4 +1,4 @@
-package com.microcare.springbootmicrocare;
+package com.microcare.secondspringbootmicrocare;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
