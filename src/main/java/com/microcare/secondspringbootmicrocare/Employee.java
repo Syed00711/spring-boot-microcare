@@ -2,6 +2,8 @@ package com.microcare.secondspringbootmicrocare;
 
 import java.time.LocalDate;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 public class Employee {
 	
 	private int employee_id;
@@ -9,6 +11,7 @@ public class Employee {
 	private String last_name;
 	private String email;
 	private String phone;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate hire_date;
 	private int manager_id;
 	private String job_title;
