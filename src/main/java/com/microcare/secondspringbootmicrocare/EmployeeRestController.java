@@ -37,9 +37,9 @@ public class EmployeeRestController {
 	  }
 	 
 	 @GetMapping("/employees")
-	 public  List<Employee> getEmployee() {
-	    
-	    return db.getEmployees();
+	 public  String getEmployees(Model model) {
+	    model.addAttribute("listemp", db.getEmployees());
+	    return "employees";
 	  }
 	 
 	 @PutMapping("/employee")
@@ -58,7 +58,7 @@ public int updateEmployee(@RequestBody Employee emp) {
 	 		else
 	 			model.addAttribute("message", "Employee Failed");
 	 		
-	 		return "index";
+	 		return "redirect:/employees";
 	 		
 	 		
 	 	 }
