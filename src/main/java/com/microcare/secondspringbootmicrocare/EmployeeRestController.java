@@ -36,17 +36,29 @@ public class EmployeeRestController {
 	    return db.getEmployee(id);
 	  }
 	 
+
+	 @GetMapping("/viewemployee/{id}")
+	 public  String viewEmployee(@PathVariable int id,Model model) {
+			Employee employee =db.getEmployee(id);
+			
+		 	model.addAttribute("employee", employee);
+
+	     return "update";
+	  }
+	 
 	 @GetMapping("/employees")
 	 public  String getEmployees(Model model) {
 	    model.addAttribute("listemp", db.getEmployees());
 	    return "employees";
 	  }
 	 
-	 @PutMapping("/employee")
-public int updateEmployee(@RequestBody Employee emp) {
+	 @PostMapping("/updateemployee")
+public String updateEmployee(@ModelAttribute("employee") Employee emp) {
 		 
-		 System.out.println(emp.toString());
-		return db.updateEmployee(emp);
+		System.out.println(emp.toString());
+		 db.updateEmployee(emp);
+		 
+		 return "redirect:/employees";
 	 }
 	 
 	 @PostMapping("/employee")
@@ -63,11 +75,13 @@ public int updateEmployee(@RequestBody Employee emp) {
 	 		
 	 	 }
 	 
-	 @DeleteMapping("/employee/{email}")
-	 public int deleteEmployee(@PathVariable String email) {
+	 @GetMapping("/deleteemployee/{email}")
+	 public String deleteEmployee(@ModelAttribute("email")  String email) {
 	 		 
 	 	
-	 		return db.deleteEmployee(email);
+	 		db.deleteEmployee(email);
+	 		
+	 		return "redirect:/employees";
 	 	 }
 	 
 	 @PostMapping("/employees")

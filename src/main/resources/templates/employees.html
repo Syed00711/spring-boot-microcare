@@ -19,6 +19,8 @@
       <th scope="col">Last Name</th>
       <th scope="col">Email</th>
       <th scope="col">Phone</th>
+      <th scope="col">Delete</th>
+      <th scope="col">Edit</th>
     </tr>
   </thead>
   <tbody>
@@ -27,6 +29,8 @@
       <td th:text="${employee.last_name}"></td>
       <td th:text="${employee.email}"></td>
       <td th:text="${employee.phone}"></td>
+      <td><a th:href="@{|/deleteemployee/${employee.email}|}">delete</a></td>
+      <td><a th:href="@{|/viewemployee/${employee.employee_id}|}">edit</a></td>
     </tr>
    
   </tbody>
