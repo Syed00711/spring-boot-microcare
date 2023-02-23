@@ -8,28 +8,85 @@
     href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
     integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
     crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.6.3.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function() {
+    	  $("#createemp").validate({
+    	    messages: {
+    	      first_name: {
+    	        required: "Please enter a first name"
+    	      },
+    	      last_name: {
+    	        required: "Please enter a last name"
+    	      },
+    	      email: {
+    	        required: "Please enter a valid email address"
+    	      },
+    	      phone: {
+    	        required: "Please enter a valid phone number"
+    	      },
+    	      hire_date: {
+    	        required: "Please enter a valid hire date"
+    	      },
+    	      job_title: {
+    	        required: "Please enter your job_title"
+    	      },
+    	      salary: {
+    	        required: "Please enter your salary"
+    	      },
+    	      manager_id: {
+    	        required: "Please enter your manager_id"
+    	      }
+    	    },
+    	    rules: {
+    	      first_name: "required",
+    	      last_name: "required",
+
+    	      email: { // compound rule
+    	        required: true,
+    	        email: true,
+    	      },
+
+    	      phone: {
+    	        required: true,
+    	        pattern: "^[0-9-+s()]*$",
+    	      },
+    	      job_title: "required",
+    	      hire_date: "required",
+    	      salary: "required",
+    	      manager_id: "required",
+    	    },
+
+    	  });
+
+
+
+    	  $('#button').click(function() {
+    	    $("#createemp").valid();
+
+    	  });
+    	});
+</script>
 </head>
 <body>
     <div class="container">
         <h1>Employee Management System</h1>
         <hr>
-             <h2 >Create Employee</h2>
-             <hr>
-
-    
+        <h2 th:text="${title}"></h2>
  
-        <form action="#" th:action="@{/employee}" th:object="${employee}"
+        <form id="createemp" action="#" th:action="@{/employee}" th:object="${employee}"
             method="POST">
-            <input type="text" th:field="*{first_name}" placeholder="First Name" class="form-control mb-4 col-4"> 
-            <input type="text" th:field="*{last_name}" placeholder="Last Name" class="form-control mb-4 col-4">
-            <input type="text" th:field="*{email}" placeholder="Email" class="form-control mb-4 col-4">
-            <input type="text" th:field="*{phone}" placeholder="Phone" class="form-control mb-4 col-4">
-            <input type="date" th:field="*{hire_date}" placeholder="Hire Date" class="form-control mb-4 col-4">
-            <input type="text" th:field="*{job_title}" placeholder="Job Title" class="form-control mb-4 col-4">
-            <input type="text" th:field="*{salary}" placeholder="Salary" class="form-control mb-4 col-4">
-            <input type="text" th:field="*{manager_id}" placeholder="Manager Id" class="form-control mb-4 col-4">
+            <input id="first_name" type="text" th:field="*{first_name}" placeholder="First Name" class="form-control mb-4 col-4"> 
+            <input id="last_name" type="text" th:field="*{last_name}" placeholder="Last Name" class="form-control mb-4 col-4">
+            <input id="email" type="text" th:field="*{email}" placeholder="Email" class="form-control mb-4 col-4">
+            <input id="phone" type="text" th:field="*{phone}" placeholder="Phone" class="form-control mb-4 col-4">
+            <input id="hire_date" type="date" th:field="*{hire_date}" placeholder="Hire Date" class="form-control mb-4 col-4">
+            <input id="job_title" type="text" th:field="*{job_title}" placeholder="Job Title" class="form-control mb-4 col-4">
+            <input id="salary" type="text" th:field="*{salary}" placeholder="Salary" class="form-control mb-4 col-4">
+            <input id="manager_id" type="text" th:field="*{manager_id}" placeholder="Manager Id" class="form-control mb-4 col-4">
            
-            <button type="submit" class="btn btn-info col-2">Create Button</button>
+            <button type="submit" id="button" class="btn btn-info col-2"  >create</button>
         </form>
  
         <hr>
