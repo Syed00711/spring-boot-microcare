@@ -17,6 +17,14 @@ public class Employee {
 	private String job_title;
 	private long salary;
 	
+	private boolean resume;
+	
+	public boolean isResume() {
+		return resume;
+	}
+	public void setResume(boolean resume) {
+		this.resume = resume;
+	}
 	public long getSalary() {
 		return salary;
 	}

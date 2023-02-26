@@ -1,5 +1,6 @@
 package com.microcare.secondspringbootmicrocare;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 
 
 
@@ -88,4 +92,41 @@ public String updateEmployee(@ModelAttribute("employee") Employee emp) {
 	 public int createEmployees(@RequestBody List<Employee> emp) { 		 
 	 		return db.insertEmployees(emp);
 	 	 }
+	 
+	 @GetMapping("/upload")
+	 public String getResume(Model model) {
+		 Employee_Resume employee_resume =new Employee_Resume();
+		 
+		 model.addAttribute("employee_resume", employee_resume);
+		 return "upload";
+	 }
+	 
+	 @PostMapping("/uploadresume")
+	 public String uploadResume(@ModelAttribute("employee_resume") Employee_Resume emp,Model model) throws IOException {
+	 
+	 
+	 emp.setFileName(emp.getFile().getOriginalFilename());
+	 emp.setFileType(emp.getFile().getContentType());
+	 emp.setFileContent(emp.getFile().getBytes());
+	 db.insertFile(emp);
+	 model.addAttribute("file_uploaded", "Resume uploaded succesfully");
+	 return "upload";
+	 }
+	 
+	 
+	 @GetMapping("/downloadresume/{employee_id}")
+	 public void getEmpResume(@ModelAttribute("employee_id") int employee_id,HttpServletResponse response) throws IOException {
+		 
+		 
+		 Employee_Resume er =db.getEmployeefile(employee_id);
+		 response.setContentType("application/octet-stream");
+		   String headerKey = "Content-Disposition";
+		   String headerValue = "attachment; filename = "+er.getFileName();
+		   response.setHeader(headerKey, headerValue);
+		   ServletOutputStream outputStream = response.getOutputStream();
+		   outputStream.write(er.getFileContent());
+		   outputStream.close();
+	
+	 }
+	 
 }

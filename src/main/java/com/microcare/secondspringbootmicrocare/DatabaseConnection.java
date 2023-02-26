@@ -29,8 +29,53 @@ public class DatabaseConnection {
     
     private static final String udpemployee ="update employees set FIRST_NAME=?,last_name=? where employee_id=?";
     private static final String deleteEmployee ="delete from employees where email=?";
-    
+    private static final String insertfile= "insert into employee_resume values((select max(fileid)+1 from employee_resume),?,?,?,?)";
 
+    
+    public int insertFile(Employee_Resume er) {
+
+    	int result=0;
+try {
+
+	
+		
+			PreparedStatement stmt =  dataSource.getConnection().prepareStatement(insertfile);
+			stmt.setString(1, er.getFileName());
+			stmt.setString(2, er.getFileType());
+			stmt.setBytes(3, er.getFileContent());
+			stmt.setInt(4,er.getEmployee_id());
+			result =stmt.executeUpdate();
+			
+			
+} catch (SQLException e) {
+	e.printStackTrace();
+}	
+		return result;
+    	
+    	
+    }
+    
+    
+    public Employee_Resume getEmployeefile(int employee_id) {
+    	
+Employee_Resume emp =new Employee_Resume();
+		
+		try {
+            
+			Statement stmt = dataSource.getConnection().createStatement();
+		ResultSet rs =stmt.executeQuery("select * from employee_resume where employee_id="+employee_id);			
+			while(rs.next()) {
+				emp.setEmployee_id(rs.getInt("EMPLOYEE_ID"));
+				emp.setFileName(rs.getString("FILE_NAME"));
+				emp.setFileType(rs.getString("FILE_TYPE"));
+				emp.setFileContent(rs.getBytes("FILE_CONTENT"));
+			}
+		
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+return emp;
+    }
     
     
 public int insertEmployees(List<Employee> emps) {
@@ -135,10 +180,11 @@ return result;
     public List<Employee> getEmployees(){
     	List<Employee> employees = new ArrayList<Employee>();
           Employee emp;
-		
+          Statement stmt1=null;
+          Statement stmt =null;
 		try {
-            
-			Statement stmt = dataSource.getConnection().createStatement();
+			 stmt1 = dataSource.getConnection().createStatement();
+			 stmt = dataSource.getConnection().createStatement();
 		ResultSet rs =stmt.executeQuery("select * from employees");			
 			while(rs.next()) {
 				emp=new Employee();
@@ -150,6 +196,10 @@ return result;
 				emp.setJob_title(rs.getString("JOB_TITLE"));
 				emp.setHire_date(rs.getDate("HIRE_DATE").toLocalDate());
 				emp.setManager_id(rs.getInt("MANAGER_ID"));
+				ResultSet rs1 =stmt1.executeQuery("select * from employee_resume where employee_id="+rs.getInt("EMPLOYEE_ID"));	
+				while(rs1.next()) {
+				emp.setResume(true);
+				}
 				employees.add(emp);
 			}
 		

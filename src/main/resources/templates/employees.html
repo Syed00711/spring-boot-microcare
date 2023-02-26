@@ -15,22 +15,26 @@
 <table class="table table-striped">
   <thead>
     <tr>
+    <th scope="col">Employee Id</th>
       <th scope="col">First Name</th>
       <th scope="col">Last Name</th>
       <th scope="col">Email</th>
       <th scope="col">Phone</th>
       <th scope="col">Delete</th>
       <th scope="col">Edit</th>
+      <th scope="col">download</th>
     </tr>
   </thead>
   <tbody>
     <tr th:each="employee: ${listemp}">
+    <th scope="row" th:text="${employee.employee_id}"></th>
       <th scope="row" th:text="${employee.first_name}"></th>
       <td th:text="${employee.last_name}"></td>
       <td th:text="${employee.email}"></td>
       <td th:text="${employee.phone}"></td>
       <td><a th:href="@{|/deleteemployee/${employee.email}|}">delete</a></td>
       <td><a th:href="@{|/viewemployee/${employee.employee_id}|}">edit</a></td>
+    <td><a th:if="${employee.resume}==true" th:href="@{|/downloadresume/${employee.employee_id}|}">download</a></td>
     </tr>
    
   </tbody>
