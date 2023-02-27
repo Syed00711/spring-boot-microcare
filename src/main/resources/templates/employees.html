@@ -6,35 +6,41 @@
 <link rel="stylesheet"
     href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
     integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
-    crossorigin="anonymous">
+    crossorigin="anonymous" />
+    <script type="text/javascript" src="employees.js"></script>
 </head>
 <body>
 
 <div class="container" align="center">
-
-<table class="table table-striped">
+<div class="d-flex justify-content-end">
+<input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for data..">
+  <form th:action="@{/logout}" method="post"> 
+         <input type="submit" value="Sign Out" class='btn btn-success'/> 
+         </form>
+         </div>
+<table id="myTable" class="table table-striped">
   <thead>
     <tr>
-    <th scope="col">Employee Id</th>
+      <th scope="col">Employee Id</th>
       <th scope="col">First Name</th>
       <th scope="col">Last Name</th>
       <th scope="col">Email</th>
       <th scope="col">Phone</th>
       <th scope="col">Delete</th>
       <th scope="col">Edit</th>
-      <th scope="col">download</th>
+      <th scope="col">Download</th>
     </tr>
   </thead>
   <tbody>
     <tr th:each="employee: ${listemp}">
-    <th scope="row" th:text="${employee.employee_id}"></th>
+    <td th:text="${employee.employee_id}"></td>
       <th scope="row" th:text="${employee.first_name}"></th>
       <td th:text="${employee.last_name}"></td>
       <td th:text="${employee.email}"></td>
       <td th:text="${employee.phone}"></td>
       <td><a th:href="@{|/deleteemployee/${employee.email}|}">delete</a></td>
       <td><a th:href="@{|/viewemployee/${employee.employee_id}|}">edit</a></td>
-    <td><a th:if="${employee.resume}==true" th:href="@{|/downloadresume/${employee.employee_id}|}">download</a></td>
+      <td><a th:if="${employee.cv}== true" th:href="@{|/downloadfile/${employee.employee_id}|}">download</a></td>
     </tr>
    
   </tbody>

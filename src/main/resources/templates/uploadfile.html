@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>File Upload & Download</title>
+<link rel="stylesheet"
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+    integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+    crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.6.3.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+
+</head>
+<body>
+ <div class="container">
+ 
+  <div class="d-flex justify-content-end">
+  <form th:action="@{/logout}" method="post"> 
+         <input type="submit" value="Sign Out" class='btn btn-success'/> 
+         </form>
+         </div>
+  <div>
+   <h1>Employee CV upload</h1>
+  </div>
+   <div class="card" style="width: 18rem;">
+      <div class="card-body" align="center">
+        <h2 class="card-title">File Upload</h2>
+        <h6 class="text-success">[[${success}]]</h6>
+        <div class="mb-3">
+          <form th:action="@{/uploadfile}" th:object="${employee_cv}" method="post" enctype="multipart/form-data">
+          <input type="text" th:field="*{employee_id}" placeholder="empid" class="form-control mb-4 col-4" >
+            <input
+              class="form-control" th:field="*{file_content}"  type="file" id="formFile"><br />
+            <input type="submit" value="Upload" class="btn btn-warning">
+          </form>
+        </div>
+      </div>
+     </div>
+
+    
+ </div>
+</body>
+</html>

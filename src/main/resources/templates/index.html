@@ -71,6 +71,14 @@
 </head>
 <body>
     <div class="container">
+
+       <div class="d-flex justify-content-end">
+  <form th:action="@{/logout}" method="post"> 
+         <input type="submit" value="Sign Out" class='btn btn-success'/> 
+         </form>
+         </div>
+
+     
         <h1>Employee Management System</h1>
         <hr>
         <h2 th:text="${title}"></h2>

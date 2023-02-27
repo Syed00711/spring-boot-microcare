@@ -1,8 +1,12 @@
 package com.microcare.secondspringbootmicrocare;
 
 import java.time.LocalDate;
+import java.util.Collection;
+import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 public class Employee {
 	
@@ -16,14 +20,14 @@ public class Employee {
 	private int manager_id;
 	private String job_title;
 	private long salary;
+	private boolean cv;
+
 	
-	private boolean resume;
-	
-	public boolean isResume() {
-		return resume;
+	public boolean isCv() {
+		return cv;
 	}
-	public void setResume(boolean resume) {
-		this.resume = resume;
+	public void setCv(boolean cv) {
+		this.cv = cv;
 	}
 	public long getSalary() {
 		return salary;
@@ -85,6 +89,6 @@ public class Employee {
 	public void setJob_title(String job_title) {
 		this.job_title = job_title;
 	}
-	
+
 
 }
