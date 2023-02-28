@@ -66,7 +66,11 @@ public class EmployeeRestController {
 	 
 	 @GetMapping("/employees")
 	 public  String getEmployees(Model model) {
-	    model.addAttribute("listemp", db.getEmployees());
+		 List<Employee> listemp=db.getEmployees();
+		 listemp.sort((o1, o2)
+                 -> o1.getEmployee_id().compareTo(
+                     o2.getEmployee_id()));
+	    model.addAttribute("listemp", listemp);
 	    return "employees";
 	  }
 	 

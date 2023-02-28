@@ -10,7 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 public class Employee {
 	
-	private int employee_id;
+	private Integer employee_id;
 	private String first_name;
 	private String last_name;
 	private String email;
@@ -41,10 +41,10 @@ public class Employee {
 				+ ", email=" + email + ", phone=" + phone + ", hire_date=" + hire_date + ", manager_id=" + manager_id
 				+ ", job_title=" + job_title + ", salary=" + salary + "]";
 	}
-	public int getEmployee_id() {
+	public Integer getEmployee_id() {
 		return employee_id;
 	}
-	public void setEmployee_id(int employee_id) {
+	public void setEmployee_id(Integer employee_id) {
 		this.employee_id = employee_id;
 	}
 	public String getFirst_name() {
