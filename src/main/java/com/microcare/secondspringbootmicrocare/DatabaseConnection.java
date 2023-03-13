@@ -11,9 +11,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+
+
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 
@@ -24,6 +27,9 @@ public class DatabaseConnection {
 	@Autowired
 	DataSource dataSource;
 	
+	@Autowired 
+	   private PasswordEncoder passwordEncoder; 
+	
 	 //  private static String instemp="insert into employees values((select max(employee_id)+1 from employees),"
 	    //		+ "FIRST_NAME,LAST_NAME,EMAIL,PHONE,HIRE_DATE,10,JOB_TITLE,SALARY)";
 	    
@@ -31,7 +37,7 @@ public class DatabaseConnection {
     private static final String udpemployee ="update employees set FIRST_NAME=?,last_name=? where employee_id=?";
     private static final String deleteEmployee ="delete from employees where email=?";
     private static final String insertfile="insert into employee_cv values((select max(fileid)+1 from employee_cv),?,?,?,?,?)";
-
+    private static final String createuser="insert into login values ((select max(user_id)+1 from login),?,?,null)";
     
     public Employee_CV getCV(int employee_id) {
     	
@@ -140,6 +146,8 @@ try {
 		result =stmt.executeUpdate(instemp);
 			
 	}
+	
+	
 			
 } catch (SQLException e) {
 	e.printStackTrace();
@@ -304,7 +312,64 @@ public  Login getUser(String username) {
 return user;
 }
 	
+public List<Employee> getJsonEmployees(){
+	List<Employee> employees = new ArrayList<Employee>();
+      Employee emp;
+      Statement stmt = null;
+	try {
+
+		 stmt = dataSource.getConnection().createStatement();
+	ResultSet rs =stmt.executeQuery("select * from employees");	
+	System.out.println(rs.getFetchSize());
+		while(rs.next()) {
+			System.out.println("");
+			emp=new Employee();
+			emp.setEmployee_id(rs.getInt("EMPLOYEE_ID"));
+			emp.setFirst_name(rs.getString("FIRST_NAME"));
+			emp.setLast_name(rs.getString("LAST_NAME"));
+			emp.setPhone(rs.getString("PHONE"));
+			emp.setEmail(rs.getString("EMAIL"));
+			emp.setJob_title(rs.getString("JOB_TITLE"));
+			emp.setHire_date(rs.getDate("HIRE_DATE").toLocalDate());
+			emp.setManager_id(rs.getInt("MANAGER_ID"));
+			employees.add(emp);
+		}
 	
+	} catch (SQLException e) {
+		e.printStackTrace();
+	}finally {
+		try {
+			stmt.close();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+return employees;
+	
+	
+}
+
+
+public  boolean createUser(Login signup) {
+	
+	boolean result=false;
+
+	
+	try {
+        
+		PreparedStatement stmt = dataSource.getConnection().prepareStatement(createuser);
+		stmt.setString(1, passwordEncoder.encode(signup.getPassword()));
+		stmt.setString(2, signup.getUsername());
+		
+		 result=stmt.execute();
+	} catch (SQLException e) {
+		e.printStackTrace();
+	}
+return result;
+}
 	
 
 	

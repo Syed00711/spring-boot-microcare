@@ -40,6 +40,24 @@ public class EmployeeRestController {
 	 		return "login";
 	 	 }
 	
+	
+	@GetMapping("/signup")
+	 public String signup(Model model) {
+		Login signup =new Login();
+		
+		model.addAttribute("signup", signup); 
+	 		return "signup";
+	 	 }
+	
+	@PostMapping("/signup")
+	 public String signup(@ModelAttribute("signup") Login signup,Model model) {
+		
+		System.out.println(signup.toString());
+		db.createUser(signup);
+		model.addAttribute("success","User Created Successfully");
+		return "signup";
+	 	 }
+	
 	 
 	 @GetMapping("/")
 	 public String homepage(Model model) {
@@ -73,6 +91,7 @@ public class EmployeeRestController {
 	    model.addAttribute("listemp", listemp);
 	    return "employees";
 	  }
+	
 	 
 	 @PostMapping("/updateemployee")
 public String updateEmployee(@ModelAttribute("employee") Employee emp) {
