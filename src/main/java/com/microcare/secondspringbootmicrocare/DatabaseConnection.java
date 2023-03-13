@@ -30,10 +30,9 @@ public class DatabaseConnection {
 	@Autowired 
 	   private PasswordEncoder passwordEncoder; 
 	
-	 //  private static String instemp="insert into employees values((select max(employee_id)+1 from employees),"
-	    //		+ "FIRST_NAME,LAST_NAME,EMAIL,PHONE,HIRE_DATE,10,JOB_TITLE,SALARY)";
-	    
-    
+	     
+	private static String instemp="insert into employees(EMPLOYEE_ID,FIRST_NAME,LAST_NAME,EMAIL,PHONE,HIRE_DATE,MANAGER_ID,JOB_TITLE,SALARY) values((select max(employee_id)+1 from employees)"
+			+ ",?,?,?,?,?,?,?,?)";
     private static final String udpemployee ="update employees set FIRST_NAME=?,last_name=? where employee_id=?";
     private static final String deleteEmployee ="delete from employees where email=?";
     private static final String insertfile="insert into employee_cv values((select max(fileid)+1 from employee_cv),?,?,?,?,?)";
@@ -98,52 +97,51 @@ return emp;
     
 public int insertEmployees(List<Employee> emps) {
     	
-    	int result=0;
+    	ResultSet result;
+    	int count=0;
 try {
 	for(Employee emp:emps) {
-		String instemp="insert into employees values((select max(employee_id)+1 from employees),"
-	    		+ "FIRST_NAME,LAST_NAME,EMAIL,PHONE,HIRE_DATE,10,JOB_TITLE,SALARY)";
-	    
-		instemp=	instemp.replace("FIRST_NAME", "'"+emp.getFirst_name()+"'")
-				.replace("LAST_NAME", "'"+emp.getLast_name()+"'")
-				.replace("EMAIL", "'"+emp.getEmail()+"'")
-				.replace("PHONE", "'"+emp.getPhone()+"'")
-				.replace("HIRE_DATE","sysdate")
-				.replace("JOB_TITLE", "'"+emp.getJob_title()+"'").replace("SALARY",Long.toString(emp.getSalary()));
-		
-		System.out.println(instemp);
-		Statement stmt =  dataSource.getConnection().createStatement();
-		result +=  stmt.executeUpdate(instemp);
+		PreparedStatement stmt =  dataSource.getConnection().prepareStatement(instemp);
+		stmt.setString(1, emp.getFirst_name());
+		stmt.setString(2, emp.getLast_name());
+		stmt.setString(3, emp.getEmail());
+		stmt.setString(4, emp.getPhone());
+		stmt.setDate(5,java.sql.Date.valueOf(emp.getHire_date()));
+		stmt.setInt(6, emp.getManager_id());
+		stmt.setString(7, emp.getJob_title());
+	 	stmt.setInt(8, (int)emp.getSalary());
+	result =stmt.executeQuery();
+count++;
 			
 	}
 			
 } catch (SQLException e) {
 	e.printStackTrace();
 }	
-		return result;
+		return count;
     	
     }
-    
+
+
     
     public int insertEmployee(Employee emp) {
     	
-    	int result=0;
+    	ResultSet result;
 try {
-	String instemp="insert into employees values((select max(employee_id)+1 from employees),"
-    		+ "FIRST_NAME,LAST_NAME,EMAIL,PHONE,HIRE_DATE,10,JOB_TITLE,SALARY)";
+	
     
 	
-	if(emp!=null) {
-		instemp =instemp.replace("FIRST_NAME", "'"+emp.getFirst_name()+"'")
-		.replace("LAST_NAME", "'"+emp.getLast_name()+"'")
-		.replace("EMAIL", "'"+emp.getEmail()+"'")
-		.replace("PHONE", "'"+emp.getPhone()+"'")
-		.replace("HIRE_DATE","sysdate")
-		.replace("JOB_TITLE", "'"+emp.getJob_title()+"'").replace("SALARY",Long.toString(emp.getSalary()));
-		System.out.println(instemp);
-		
-			Statement stmt =  dataSource.getConnection().createStatement();
-		result =stmt.executeUpdate(instemp);
+	if(emp!=null) {	
+			PreparedStatement stmt =  dataSource.getConnection().prepareStatement(instemp);
+			stmt.setString(1, emp.getFirst_name());
+			stmt.setString(2, emp.getLast_name());
+			stmt.setString(3, emp.getEmail());
+			stmt.setString(4, emp.getPhone());
+			stmt.setDate(5,java.sql.Date.valueOf(emp.getHire_date()));
+			stmt.setInt(6, emp.getManager_id());
+			stmt.setString(7, emp.getJob_title());
+		 	stmt.setInt(8, (int)emp.getSalary());
+		result =stmt.executeQuery();
 			
 	}
 	
@@ -151,8 +149,9 @@ try {
 			
 } catch (SQLException e) {
 	e.printStackTrace();
+	return 0;
 }	
-		return result;
+		return 1;
     	
     }
     
