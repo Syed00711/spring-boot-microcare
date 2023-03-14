@@ -2,6 +2,7 @@ package com.microcare.secondspringbootmicrocare;
 
 
 import java.io.IOException;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -27,6 +28,15 @@ public class DatabaseConnection {
 	@Autowired
 	DataSource dataSource;
 	
+	Connection connection=null;
+	
+	public Connection getConnection() throws SQLException {
+		if(this.connection!=null)
+			return this.connection;
+		else
+			return connection=dataSource.getConnection();
+	}
+	
 	@Autowired 
 	   private PasswordEncoder passwordEncoder; 
 	
@@ -44,7 +54,7 @@ public class DatabaseConnection {
 		
 		try {
             
-			Statement stmt = dataSource.getConnection().createStatement();
+			Statement stmt = getConnection().createStatement();
 		ResultSet rs =stmt.executeQuery("select * from employee_cv where employee_id="+employee_id);			
 			while(rs.next()) {
 				emp.setEmployee_id(rs.getInt("EMPLOYEE_ID"));
@@ -68,7 +78,7 @@ return emp;
     	int result=0;
     	PreparedStatement stmt =null;
     	try {  			
-    			 stmt =  dataSource.getConnection().prepareStatement(insertfile);
+    			 stmt =  getConnection().prepareStatement(insertfile);
     			stmt.setBytes(1,cv.getFile_content().getBytes());
     			stmt.setInt(2, cv.getEmployee_id());
     			stmt.setString(3, cv.getFileName());
@@ -101,7 +111,7 @@ public int insertEmployees(List<Employee> emps) {
     	int count=0;
 try {
 	for(Employee emp:emps) {
-		PreparedStatement stmt =  dataSource.getConnection().prepareStatement(instemp);
+		PreparedStatement stmt =  getConnection().prepareStatement(instemp);
 		stmt.setString(1, emp.getFirst_name());
 		stmt.setString(2, emp.getLast_name());
 		stmt.setString(3, emp.getEmail());
@@ -132,7 +142,7 @@ try {
     
 	
 	if(emp!=null) {	
-			PreparedStatement stmt =  dataSource.getConnection().prepareStatement(instemp);
+			PreparedStatement stmt =  getConnection().prepareStatement(instemp);
 			stmt.setString(1, emp.getFirst_name());
 			stmt.setString(2, emp.getLast_name());
 			stmt.setString(3, emp.getEmail());
@@ -159,7 +169,7 @@ try {
     	int result=0;
 try {
             //update employees set first_name=? where empl_id=?
-			PreparedStatement preparestmt =  dataSource.getConnection().prepareStatement(udpemployee);
+			PreparedStatement preparestmt =  getConnection().prepareStatement(udpemployee);
 			//
 			preparestmt.setString(1, emp.getFirst_name());
 			preparestmt.setString(2, emp.getLast_name());
@@ -183,7 +193,7 @@ return result;
     public int deleteEmployee(String email) {
     	int result=0;
     	try {
-    				PreparedStatement preparestmt =  dataSource.getConnection().prepareStatement(deleteEmployee);
+    				PreparedStatement preparestmt =  getConnection().prepareStatement(deleteEmployee);
     				preparestmt.setString(1, email);
     			    result =preparestmt.executeUpdate();
     			} catch (SQLException e) {
@@ -202,8 +212,8 @@ return result;
           Statement stmt1 =null;
           Statement stmt = null;
 		try {
-			 stmt1 = dataSource.getConnection().createStatement();
-			 stmt = dataSource.getConnection().createStatement();
+			 stmt1 = getConnection().createStatement();
+			 stmt = getConnection().createStatement();
 		ResultSet rs =stmt.executeQuery("select * from employees");			
 			while(rs.next()) {
 				emp=new Employee();
@@ -248,7 +258,7 @@ return employees;
 		
 		try {
             
-			Statement stmt = dataSource.getConnection().createStatement();
+			Statement stmt = getConnection().createStatement();
 		ResultSet rs =stmt.executeQuery("select * from employees where employee_id="+emp_id);			
 			while(rs.next()) {
 				emp.setEmployee_id(rs.getInt("EMPLOYEE_ID"));
@@ -273,7 +283,7 @@ public  Employee getEmployee(String email) {
 		
 		try {
             
-			Statement stmt = dataSource.getConnection().createStatement();
+			Statement stmt = getConnection().createStatement();
 		ResultSet rs =stmt.executeQuery("select * from employees where email="+email);			
 			while(rs.next()) {
 				emp.setEmployee_id(rs.getInt("EMPLOYEE_ID"));
@@ -298,7 +308,7 @@ public  Login getUser(String username) {
 	
 	try {
         
-		Statement stmt = dataSource.getConnection().createStatement();
+		Statement stmt = getConnection().createStatement();
 	ResultSet rs =stmt.executeQuery("select * from login where user_name='"+username+"'");			
 		while(rs.next()) {
 			user.setUser_name(rs.getString("user_name"));
@@ -317,7 +327,7 @@ public List<Employee> getJsonEmployees(){
       Statement stmt = null;
 	try {
 
-		 stmt = dataSource.getConnection().createStatement();
+		 stmt = getConnection().createStatement();
 	ResultSet rs =stmt.executeQuery("select * from employees");	
 	System.out.println(rs.getFetchSize());
 		while(rs.next()) {
@@ -359,7 +369,7 @@ public  boolean createUser(Login signup) {
 	
 	try {
         
-		PreparedStatement stmt = dataSource.getConnection().prepareStatement(createuser);
+		PreparedStatement stmt = getConnection().prepareStatement(createuser);
 		stmt.setString(1, passwordEncoder.encode(signup.getPassword()));
 		stmt.setString(2, signup.getUsername());
 		

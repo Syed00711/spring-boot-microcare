@@ -27,19 +27,15 @@ public class AuthProvider implements AuthenticationProvider {
 
    @Override 
    public Authentication authenticate(Authentication authentication)  throws AuthenticationException { 
-	   logger.warn("This is a warn");
+	
 	   String username = authentication.getName();
-       String password = authentication.getCredentials().toString();
-       logger.debug("Authentication:"+password);
+       String password = authentication.getCredentials().toString();   
        Login user = db.getUser(username);
        if (user == null) {
     	   logger.error("Authentication failed");
            throw new BadCredentialsException("Details not found");
        }
-       logger.debug("Userpassword:"+user.getPassword());
-logger.info("encoded password"+passwordEncoder.encode(user.getPassword()));
        if (passwordEncoder.matches(password, user.getPassword())) {
-           logger.debug("Successfully Authenticated the user");
            return new UsernamePasswordAuthenticationToken(username, password, null);
        } else {
            throw new BadCredentialsException("Password mismatch");

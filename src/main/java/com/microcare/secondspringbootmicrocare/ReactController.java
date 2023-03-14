@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,6 +38,28 @@ public class ReactController {
 	 		return message;
 	 		
 	 		
+	 	 }
+	 
+	 @GetMapping("/reactdeleteemployee/{email}")
+	 public int deleteEmployee(@PathVariable String email) {
+	 		 
+	 	
+	 		return db.deleteEmployee(email);
+	 		
+	 		
+	 	 }
+	 
+	 @PostMapping("/reactupdateemployee")
+	 public String updateEmployee(@RequestBody Employee emp) {
+		 String message ;
+	 		System.out.println(emp.toString());
+	 		if( db.updateEmployee(emp)>=1)
+	 		message ="Employee Added";
+	 		else
+	 			message= "Employee Failed";
+	 		
+	 		return message;
+
 	 	 }
 
 }
