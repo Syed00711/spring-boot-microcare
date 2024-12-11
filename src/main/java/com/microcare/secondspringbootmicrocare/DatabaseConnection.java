@@ -41,10 +41,10 @@ public class DatabaseConnection {
 	   private PasswordEncoder passwordEncoder; 
 	
 	     
-	private static String instemp="insert into employees(EMPLOYEE_ID,FIRST_NAME,LAST_NAME,EMAIL,PHONE,HIRE_DATE,MANAGER_ID,JOB_TITLE,SALARY) values((select max(employee_id)+1 from employees)"
+	private static String instemp="insert into employee_new(EMPLOYEE_ID,FIRST_NAME,LAST_NAME,EMAIL,PHONE,HIRE_DATE,MANAGER_ID,JOB_TITLE,SALARY) values((select max(employee_id)+1 from employee_new)"
 			+ ",?,?,?,?,?,?,?,?)";
-    private static final String udpemployee ="update employees set FIRST_NAME=?,last_name=? where employee_id=?";
-    private static final String deleteEmployee ="delete from employees where email=?";
+    private static final String udpemployee ="update employee_new set FIRST_NAME=?,last_name=? where employee_id=?";
+    private static final String deleteEmployee ="delete from employee_new where email=?";
     private static final String insertfile="insert into employee_cv values((select max(fileid)+1 from employee_cv),?,?,?,?,?)";
     private static final String createuser="insert into login values ((select max(user_id)+1 from login),?,?,null)";
     
@@ -214,7 +214,7 @@ return result;
 		try {
 			 stmt1 = getConnection().createStatement();
 			 stmt = getConnection().createStatement();
-		ResultSet rs =stmt.executeQuery("select * from employees");			
+		ResultSet rs =stmt.executeQuery("select * from employee_new");			
 			while(rs.next()) {
 				emp=new Employee();
 				emp.setEmployee_id(rs.getInt("EMPLOYEE_ID"));
@@ -259,7 +259,7 @@ return employees;
 		try {
             
 			Statement stmt = getConnection().createStatement();
-		ResultSet rs =stmt.executeQuery("select * from employees where employee_id="+emp_id);			
+		ResultSet rs =stmt.executeQuery("select * from employee_new where employee_id="+emp_id);			
 			while(rs.next()) {
 				emp.setEmployee_id(rs.getInt("EMPLOYEE_ID"));
 				emp.setFirst_name(rs.getString("FIRST_NAME"));
@@ -284,7 +284,7 @@ public  Employee getEmployee(String email) {
 		try {
             
 			Statement stmt = getConnection().createStatement();
-		ResultSet rs =stmt.executeQuery("select * from employees where email="+email);			
+		ResultSet rs =stmt.executeQuery("select * from employee_new where email="+email);			
 			while(rs.next()) {
 				emp.setEmployee_id(rs.getInt("EMPLOYEE_ID"));
 				emp.setFirst_name(rs.getString("FIRST_NAME"));
@@ -328,7 +328,7 @@ public List<Employee> getJsonEmployees(){
 	try {
 
 		 stmt = getConnection().createStatement();
-	ResultSet rs =stmt.executeQuery("select * from employees");	
+	ResultSet rs =stmt.executeQuery("select * from employee_new");	
 	System.out.println(rs.getFetchSize());
 		while(rs.next()) {
 			System.out.println("");
@@ -370,8 +370,8 @@ public  boolean createUser(Login signup) {
 	try {
         
 		PreparedStatement stmt = getConnection().prepareStatement(createuser);
-		stmt.setString(1, passwordEncoder.encode(signup.getPassword()));
-		stmt.setString(2, signup.getUsername());
+		stmt.setString(2, passwordEncoder.encode(signup.getPassword()));
+		stmt.setString(1, signup.getUsername());
 		
 		 result=stmt.execute();
 	} catch (SQLException e) {
